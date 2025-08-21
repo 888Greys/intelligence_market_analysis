@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Professional Kenya Market Intelligence Dashboard - AI-powered market research for East African business opportunities">
+    <meta name="keywords" content="Kenya market research, fintech analysis, M-Pesa, digital lending, East Africa business intelligence">
+    <title>📊 Kenya Market Intelligence Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .research-categories {
+            margin-bottom: 25px;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .category-btn {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .category-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .category-btn:active {
+            transform: translateY(-1px);
+            transition: all 0.1s ease;
+        }
+        
+        .category-btn.selected {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .custom-research {
+            border-top: 2px solid #f0f0f0;
+            padding-top: 20px;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-group input {
+            flex: 1;
+            min-width: 300px;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .control-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 44px;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            transition: all 0.1s ease;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .status.loading {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .content {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .trends-section, .charts-section, .sources-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .sources-content {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            font-family: 'Georgia', serif;
+            line-height: 1.7;
+        }
+        
+        .source-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .source-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .source-url {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        
+        .source-url:hover {
+            text-decoration: underline;
+            color: #5a6fd8;
+        }
+        
+        .source-date {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .source-description {
+            color: #495057;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 6px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
+        }
+        
+        .trends-content {
+            line-height: 1.8;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            font-family: 'Georgia', serif;
+        }
+        
+        .trends-content h1, .trends-content h2, .trends-content h3 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin: 20px 0 15px 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .trends-content h1 {
+            font-size: 1.4rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+        
+        .trends-content h2 {
+            font-size: 1.2rem;
+            color: #34495e;
+        }
+        
+        .trends-content h3 {
+            font-size: 1.1rem;
+            color: #5a6c7d;
+        }
+        
+        .trends-content strong, .trends-content b {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .trends-content em, .trends-content i {
+            color: #667eea;
+            font-style: italic;
+        }
+        
+        .trends-content ul, .trends-content ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        .trends-content li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .trends-content p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        
+        .trends-content .highlight {
+            background: linear-gradient(120deg, #a8e6cf 0%, #dcedc1 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .charts-grid {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+        }
+        
+        .chart-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: #6c757d;
+        }
+        
+        .loading-text {
+            margin-top: 15px;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+                margin-bottom: 8px;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .header-stats {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 15px;
+            }
+            
+            .stat-item {
+                padding: 12px 18px;
+                min-width: 120px;
+            }
+            
+            .controls {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .research-categories h3 {
+                font-size: 1.1rem;
+                margin-bottom: 12px;
+            }
+            
+            .category-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .category-btn {
+                padding: 15px;
+                font-size: 0.9rem;
+                text-align: center;
+            }
+            
+            .custom-research h3 {
+                font-size: 1.1rem;
+                margin: 20px 0 12px 0;
+            }
+            
+            .control-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .control-group input {
+                min-width: 100%;
+                padding: 15px;
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 15px 20px;
+                font-size: 1rem;
+                width: 100%;
+            }
+            
+            .trends-section, .charts-section {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .sources-section {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .sources-content {
+                padding: 20px;
+                font-size: 0.95rem;
+            }
+            
+            .source-item {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .source-title {
+                font-size: 0.95rem;
+            }
+            
+            .source-url {
+                font-size: 0.85rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            
+            .section-title::before {
+                width: 40px;
+                height: 4px;
+                align-self: center;
+            }
+            
+            .trends-content {
+                padding: 20px;
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+            
+            .trends-content h1 {
+                font-size: 1.2rem;
+            }
+            
+            .trends-content h2 {
+                font-size: 1.1rem;
+            }
+            
+            .trends-content h3 {
+                font-size: 1rem;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .chart-container {
+                height: 350px;
+                padding: 15px;
+            }
+            
+            .chart-title {
+                font-size: 1rem;
+                margin-bottom: 15px;
+                padding-bottom: 8px;
+            }
+            
+            .loading-state {
+                height: 250px;
+            }
+            
+            .loading-text {
+                font-size: 0.9rem;
+                text-align: center;
+            }
+            
+            .last-updated {
+                font-size: 0.9rem;
+                margin-top: 15px;
+                padding: 0 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .header p {
+                font-size: 0.9rem;
+            }
+            
+            .header-stats {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .stat-item {
+                flex: 1;
+                min-width: 100px;
+                padding: 10px 12px;
+            }
+            
+            .stat-number {
+                font-size: 1.2rem;
+            }
+            
+            .stat-label {
+                font-size: 0.8rem;
+            }
+            
+            .controls {
+                padding: 15px;
+            }
+            
+            .category-btn {
+                padding: 12px;
+                font-size: 0.85rem;
+            }
+            
+            .control-group input {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .trends-section, .charts-section {
+                padding: 15px;
+            }
+            
+            .sources-section {
+                padding: 15px;
+            }
+            
+            .sources-content {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+            
+            .source-item {
+                padding: 10px;
+                margin-bottom: 12px;
+            }
+            
+            .source-title {
+                font-size: 0.9rem;
+            }
+            
+            .source-url {
+                font-size: 0.8rem;
+            }
+            
+            .source-description {
+                font-size: 0.85rem;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .trends-content {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+            
+            .chart-container {
+                height: 300px;
+                padding: 12px;
+            }
+            
+            .chart-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Kenya Market Intelligence Dashboard</h1>
+            <p>AI-powered market research for East African business opportunities</p>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <span class="stat-number">🇰🇪</span>
+                    <span class="stat-label">Kenya Focus</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">🤖</span>
+                    <span class="stat-label">AI Research</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">📊</span>
+                    <span class="stat-label">Live Data</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="research-categories">
+                <h3 style="margin-bottom: 15px; color: #333;">🇰🇪 Kenya Market Research Categories</h3>
+                <div class="category-grid">
+                    <button class="category-btn" data-topic="M-Pesa ecosystem analysis, market expansion, competition from Airtel Money, T-Kash, and international players in Kenya">
+                        💳 M-Pesa Ecosystem Analysis
+                    </button>
+                    <button class="category-btn" data-topic="Digital lending platforms market penetration: Tala, Branch, KCB M-Pesa, Timiza, Fuliza lending services in Kenya">
+                        📱 Digital Lending Platforms
+                    </button>
+                    <button class="category-btn" data-topic="Cryptocurrency adoption rates in Kenya compared to Nigeria, South Africa, Ghana and other African markets">
+                        ₿ Cryptocurrency Adoption
+                    </button>
+                    <button class="category-btn" data-topic="Cross-border payment solutions for East African Community trade: EAC payments, regional fintech integration">
+                        🌍 Cross-border Payments
+                    </button>
+                    <button class="category-btn" data-topic="Agriculture technology and precision farming adoption among Kenyan smallholder farmers">
+                        🌾 AgriTech & Farming
+                    </button>
+                    <button class="category-btn" data-topic="Renewable energy market in Kenya: solar home systems, mini-grids, and clean energy adoption">
+                        ⚡ Renewable Energy
+                    </button>
+                    <button class="category-btn" data-topic="E-commerce growth in Kenya: Jumia vs local platforms, social commerce trends, last-mile delivery">
+                        🛒 E-commerce Trends
+                    </button>
+                    <button class="category-btn" data-topic="Healthcare technology and telemedicine adoption in Kenya post-COVID, digital health solutions">
+                        🏥 HealthTech & Telemedicine
+                    </button>
+                </div>
+            </div>
+            
+            <div class="custom-research">
+                <h3 style="margin: 25px 0 15px 0; color: #333;">🔍 Custom Research</h3>
+                <div class="control-group">
+                    <input type="text" id="topicInput" placeholder="Enter custom market topic..." value="">
+                    <button id="refreshBtn" class="btn">🔄 Research Topic</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="status" class="status" style="display: none;">
+            <span id="statusText"></span>
+        </div>
+        
+        <div class="content">
+            <div class="trends-section">
+                <h2 class="section-title">📈 Market Trends Analysis</h2>
+                <div id="trendsContent" class="trends-content">
+                    <div class="loading-state">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Analyzing Kenya Market Trends...</div>
+                        <p style="margin-top: 10px; font-style: italic; color: #6c757d;">
+                            Gathering real-time data from multiple sources
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="charts-section">
+                <h2 class="section-title">📊 Data Visualizations</h2>
+                <div id="chartsContainer" class="charts-grid">
+                    <div class="chart-container">
+                        <div class="loading-state">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Generating Professional Charts...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sources-section">
+                <h2 class="section-title">📚 Sources & Citations</h2>
+                <div id="sourcesContent" class="sources-content">
+                    <div class="loading-state">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Gathering Research Sources...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="lastUpdated" class="last-updated"></div>
+    </div>
+
+    <script>
+        let charts = [];
+        
+        function showStatus(message, type = 'loading') {
+            const status = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            // Mobile-friendly status messages
+            const isMobile = window.innerWidth <= 768;
+            let displayMessage = message;
+            
+            if (isMobile && message.length > 50) {
+                // Truncate long messages on mobile
+                displayMessage = message.substring(0, 47) + '...';
+            }
+            
+            if (type === 'loading') {
+                statusText.innerHTML = `<span class="loading-spinner"></span> ${displayMessage}`;
+            } else {
+                statusText.textContent = displayMessage;
+            }
+            
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, isMobile ? 3000 : 5000); // Shorter display time on mobile
+            }
+        }
+        
+        function hideStatus() {
+            document.getElementById('status').style.display = 'none';
+        }
+        
+        async function loadData() {
+            try {
+                const response = await fetch('/api/data');
+                const data = await response.json();
+                updateUI(data);
+                hideStatus();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showStatus('Failed to load data. Please try again.', 'error');
+            }
+        }
+        
+        async function refreshData() {
+            const topic = document.getElementById('topicInput').value;
+            const refreshBtn = document.getElementById('refreshBtn');
+            
+            if (!topic.trim()) {
+                showStatus('Please enter a market topic.', 'error');
+                return;
+            }
+            
+            refreshBtn.disabled = true;
+            const isMobile = window.innerWidth <= 768;
+            const statusMessage = isMobile ? `Researching: ${topic.substring(0, 30)}...` : `Researching market trends for: ${topic}...`;
+            showStatus(statusMessage);
+            
+            try {
+                const response = await fetch('/api/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ topic }),
+                });
+                
+                const data = await response.json();
+                updateUI(data);
+                showStatus('Research completed successfully!', 'success');
+                
+                // Scroll to results on mobile
+                if (isMobile) {
+                    setTimeout(() => {
+                        document.querySelector('.trends-section').scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('Error refreshing data:', error);
+                showStatus('Failed to refresh data. Please try again.', 'error');
+            } finally {
+                refreshBtn.disabled = false;
+            }
+        }
+        
+        function updateUI(data) {
+            // Format and update trends content
+            const formattedTrends = formatMarketTrends(data.marketTrends);
+            document.getElementById('trendsContent').innerHTML = formattedTrends;
+            
+            // Update charts
+            updateCharts(data.chartConfigs);
+            
+            // Update sources
+            updateSources(data.sources);
+            
+            // Update timestamp
+            const lastUpdated = new Date(data.lastUpdated).toLocaleString();
+            document.getElementById('lastUpdated').textContent = `Last updated: ${lastUpdated}`;
+        }
+        
+        function updateSources(sources) {
+            const sourcesContainer = document.getElementById('sourcesContent');
+            
+            if (!sources || sources.length === 0) {
+                sourcesContainer.innerHTML = `
+                    <div class="loading-state">
+                        <div style="font-size: 2rem; color: #6c757d;">📚</div>
+                        <div class="loading-text">No sources available</div>
+                        <p style="margin-top: 10px; color: #6c757d; font-style: italic;">
+                            Sources will appear here when web search tools are available
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let sourcesHTML = `
+                <div style="margin-bottom: 20px;">
+                    <p style="color: #2c3e50; font-weight: 600; margin-bottom: 15px;">
+                        📖 This research is based on information from the following sources:
+                    </p>
+                </div>
+            `;
+            
+            sources.forEach((source, index) => {
+                const sourceNumber = index + 1;
+                const title = source.title || source.name || `Source ${sourceNumber}`;
+                const url = source.url || source.link || '#';
+                const description = source.description || source.snippet || '';
+                const date = source.date || new Date().toLocaleDateString();
+                
+                sourcesHTML += `
+                    <div class="source-item">
+                        <div class="source-title">
+                            <strong>[${sourceNumber}]</strong> ${title}
+                        </div>
+                        ${url !== '#' ? `<a href="${url}" target="_blank" class="source-url">${url}</a>` : ''}
+                        ${description ? `<div class="source-description">${description}</div>` : ''}
+                        <div class="source-date">Accessed: ${date}</div>
+                    </div>
+                `;
+            });
+            
+            sourcesContainer.innerHTML = sourcesHTML;
+        }
+        
+        function formatMarketTrends(text) {
+            if (!text) return '<p>No market trends data available.</p>';
+            
+            // Split into paragraphs and format
+            let formatted = text
+                // Convert headings
+                .replace(/^([A-Z][^.\n]*:)\s*$/gm, '<h2>$1</h2>')
+                .replace(/^(\d+\.\s+[^.\n]*:?)\s*$/gm, '<h3>$1</h3>')
+                
+                // Bold key terms and numbers
+                .replace(/(\$[\d,.]+ billion|\$[\d,.]+ million|\d+%|\d+\.\d+%)/g, '<strong>$1</strong>')
+                .replace(/(market share|market size|growth rate|revenue|CAGR|compound annual growth rate)/gi, '<strong>$1</strong>')
+                
+                // Bold company names and key players
+                .replace(/(M-Pesa|Safaricom|Airtel Money|T-Kash|Equity Bank|KCB|Tala|Branch|Fuliza|Timiza)/g, '<strong>$1</strong>')
+                .replace(/(Kenya|Uganda|Tanzania|Rwanda|East Africa|North America|Sub-Saharan Africa)/g, '<strong>$1</strong>')
+                
+                // Highlight important metrics
+                .replace(/(leading|dominant|major|significant|substantial|key|primary|main)/gi, '<em>$1</em>')
+                
+                // Format bullet points
+                .replace(/^[\-\*\•]\s+(.+)$/gm, '<li>$1</li>')
+                
+                // Wrap consecutive list items in ul tags
+                .replace(/(<li>.*<\/li>\s*)+/gs, '<ul>$&</ul>')
+                
+                // Format paragraphs
+                .split('\n\n')
+                .map(paragraph => {
+                    paragraph = paragraph.trim();
+                    if (!paragraph) return '';
+                    if (paragraph.startsWith('<h') || paragraph.startsWith('<ul')) {
+                        return paragraph;
+                    }
+                    return `<p>${paragraph}</p>`;
+                })
+                .join('\n');
+            
+            return formatted;
+        }
+        
+        function updateCharts(chartConfigs) {
+            // Destroy existing charts
+            charts.forEach(chart => chart.destroy());
+            charts = [];
+            
+            const container = document.getElementById('chartsContainer');
+            container.innerHTML = '';
+            
+            if (!chartConfigs || chartConfigs.length === 0) {
+                container.innerHTML = `
+                    <div class="chart-container">
+                        <div class="loading-state">
+                            <div style="font-size: 3rem; color: #667eea;">📊</div>
+                            <div class="loading-text">No Chart Data Available</div>
+                            <p style="margin-top: 10px; color: #6c757d;">Try refreshing with a different research topic</p>
+                        </div>
+                    </div>`;
+                return;
+            }
+            
+            chartConfigs.forEach((config, index) => {
+                const chartDiv = document.createElement('div');
+                chartDiv.className = 'chart-container';
+                chartDiv.innerHTML = `
+                    <div class="chart-title">
+                        <span style="color: #667eea;">📊</span> 
+                        ${config.data.datasets[0].label}
+                    </div>
+                    <canvas id="chart${index}" style="max-height: 300px;"></canvas>
+                `;
+                container.appendChild(chartDiv);
+                
+                // Enhanced chart configuration
+                const isMobile = window.innerWidth <= 768;
+                const enhancedConfig = {
+                    ...config,
+                    options: {
+                        ...config.options,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index',
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    font: {
+                                        family: "'Segoe UI', sans-serif",
+                                        size: isMobile ? 10 : 12,
+                                        weight: '500'
+                                    },
+                                    color: '#2c3e50',
+                                    padding: isMobile ? 15 : 20
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff',
+                                borderColor: '#667eea',
+                                borderWidth: 1,
+                                titleFont: {
+                                    size: isMobile ? 12 : 14
+                                },
+                                bodyFont: {
+                                    size: isMobile ? 11 : 13
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        family: "'Segoe UI', sans-serif",
+                                        size: isMobile ? 9 : 11
+                                    },
+                                    color: '#2c3e50',
+                                    maxRotation: isMobile ? 45 : 0,
+                                    minRotation: isMobile ? 45 : 0
+                                },
+                                grid: {
+                                    color: 'rgba(102, 126, 234, 0.1)'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    font: {
+                                        family: "'Segoe UI', sans-serif",
+                                        size: isMobile ? 9 : 11
+                                    },
+                                    color: '#2c3e50'
+                                },
+                                grid: {
+                                    color: 'rgba(102, 126, 234, 0.1)'
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: isMobile ? 1000 : 1500,
+                            easing: 'easeInOutQuart'
+                        }
+                    }
+                };
+                
+                const ctx = document.getElementById(`chart${index}`).getContext('2d');
+                const chart = new Chart(ctx, enhancedConfig);
+                charts.push(chart);
+            });
+        }
+        
+        // Event listeners
+        document.getElementById('refreshBtn').addEventListener('click', refreshData);
+        document.getElementById('topicInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                refreshData();
+            }
+        });
+        
+        // Category button event listeners
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove selection from other buttons
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+                // Select current button
+                btn.classList.add('selected');
+                
+                // Set the topic and refresh
+                const topic = btn.getAttribute('data-topic');
+                document.getElementById('topicInput').value = topic;
+                refreshData();
+            });
+        });
+        
+        // Load initial data with M-Pesa analysis
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select the first category by default
+            const firstCategory = document.querySelector('.category-btn');
+            if (firstCategory) {
+                firstCategory.classList.add('selected');
+                const topic = firstCategory.getAttribute('data-topic');
+                document.getElementById('topicInput').value = topic;
+            }
+            loadData();
+        });
+        
+        // Auto-refresh every 10 minutes
+        setInterval(loadData, 10 * 60 * 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "name": "kenya-market-intelligence-dashboard",
+  "version": "1.0.0",
+  "description": "AI-powered market research platform for East African business opportunities, featuring real-time analysis of Kenya's fintech, agriculture, and emerging markets.",
+  "main": "server.js",
+  "scripts": {
+    "start": "npx tsc && node server.js",
+    "dev": "tsx server.ts",
+    "build": "npx tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "network": "./start-network.sh"
+  },
+  "keywords": [
+    "kenya",
+    "market-research",
+    "fintech",
+    "m-pesa",
+    "east-africa",
+    "ai",
+    "business-intelligence",
+    "dashboard",
+    "typescript",
+    "express",
+    "chart.js",
+    "mobile-responsive"
+  ],
+  "author": {
+    "name": "Your Name",
+    "email": "your.email@example.com",
+    "url": "https://github.com/yourusername"
+  },
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/kenya-market-intelligence-dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/kenya-market-intelligence-dashboard/issues"
+  },
+  "homepage": "https://github.com/yourusername/kenya-market-intelligence-dashboard#readme",
+  "dependencies": {
+    "@ai-sdk/google": "^2.0.7",
+    "@types/express": "^5.0.3",
+    "ai": "^5.0.19",
+    "chart.js": "^4.5.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "puppeteer": "^24.17.0",
+    "qrcode-terminal": "^0.12.0",
+    "socket.io": "^4.8.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/chart.js": "^2.9.41",
+    "@types/node": "^24.3.0",
+    "@types/qrcode-terminal": "^0.12.2",
+    "tsx": "^4.20.4",
+    "typescript": "^5.9.2"
+  }
+}
