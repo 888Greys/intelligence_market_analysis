@@ -337,9 +337,10 @@ This project is licensed under the **ISC License** - see the [LICENSE](LICENSE) 
 - **Documentation:** Check this README for common solutions
 
 ### Contact
-- **GitHub:** [@yourusername](https://github.com/yourusername)
-- **Email:** your.email@example.com
-- **LinkedIn:** [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
+
+- **Email:** kipronohm8@gmail.com
+
+
 
 ---
 
